@@ -9,9 +9,13 @@
 
 <div class="form-group">
     {!! Form::label('content', 'Content') !!}
-    {!! Form::textarea('content', null, ['class' => 'form-control', 'placeholder' => '...']) !!}
+    {!! Form::textarea('content', null, ['class' => 'form-control editor', 'placeholder' => '...', 'id' => 'editor']) !!}
 </div>
 
 <div class="form-group">
     <button class="btn btn-primary" type="submit">Save</button>
 </div>
+
+
+
+
