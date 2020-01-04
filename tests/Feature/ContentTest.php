@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Category;
 use App\Content;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
@@ -33,13 +34,23 @@ class ContentTest extends TestCase
     {
         $this->withoutExceptionHandling();
 
-        $contents = factory(Content::class, 5)->create();
+        $contents = factory(Content::class, 5)->create(['user_id' => Auth::user()->id]);
 
         $this->get(route('content.index'))
             ->assertStatus(200)
             ->assertSee($contents[1]->title);
     }
 
+    /** @test */
+    public function cant_see_content_from_another_user()
+    {
+        $this->withoutExceptionHandling();
+
+        $content = factory(Content::class)->create();
+
+        $this->get(route('content.index'))
+            ->assertDontSee($content->title);
+    }
 
     /** @test */
     public function create_a_new_content()
@@ -56,7 +67,7 @@ class ContentTest extends TestCase
     /** @test */
     public function update_a_content()
     {
-        $content = factory(Content::class)->create();
+        $content = factory(Content::class)->create(['user_id' => Auth::user()->id]);
 
         $this->assertDatabaseHas("contents", ['title' => $content->title]);
 
@@ -68,5 +79,31 @@ class ContentTest extends TestCase
         ])->assertStatus(302);
 
         $this->assertEquals($content->fresh()->title, 'New Name');
+    }
+
+    /** @test */
+    public function see_content_in_feed()
+    {
+        $content = factory(Content::class)->create([
+            'user_id' => Auth::user()->id
+        ]);
+
+        $this->get(route('content.feed'))
+            ->assertSee($content->content);
+    }
+
+    /** @test */
+    public function mark_content_as_reviewed()
+    {
+        $content = factory(Content::class)->create([
+            'user_id' => Auth::user()->id,
+            'last_review_date' => '2019-10-10'
+        ]);
+
+        $this->put(route('content.markAsReviewed', ['id' => $content->id]))
+            ->assertStatus(200);
+
+        $this->assertEquals(date('Y-m-d'), $content->fresh()->last_review_date->format('Y-m-d'));
+        $this->assertEquals(Carbon::now()->addDay()->format('Y-m-d'), $content->fresh()->next_review_date->format('Y-m-d'));
     }
 }

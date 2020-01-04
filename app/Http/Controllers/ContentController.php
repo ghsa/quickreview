@@ -10,9 +10,27 @@ use Illuminate\Support\Facades\Auth;
 class ContentController extends Controller
 {
 
+    public function feed()
+    {
+        $contents = Content::with('category')
+            ->loggedUser()
+            ->orderBy('next_review_date')
+            ->limit(50)
+            ->get();
+
+        return view('content.feed', compact('contents'));
+    }
+
+    public function markAsReviewed($id)
+    {
+        $content = Content::loggedUser()->find($id);
+        $content->setReviewed();
+        return response([], 200);
+    }
+
     public function index()
     {
-        $contents = Content::paginate(20);
+        $contents = Content::loggedUser()->paginate(20);
 
         return view('content.index', compact('contents'));
     }
@@ -54,7 +72,7 @@ class ContentController extends Controller
             'content' => 'required'
         ]);
 
-        $content = Content::find(request()->id);
+        $content = Content::loggedUser()->find(request()->id);
         $content->title = request()->title;
         $content->content = request()->get('content');
         $content->category_id = request()->category_id;

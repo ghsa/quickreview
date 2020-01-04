@@ -29,7 +29,9 @@ Route::group(['middleware' => 'auth'], function() {
     });
 
     Route::group(['as' => 'content.', 'prefix' => 'content'], function() {
+        Route::get('feed', 'ContentController@feed')->name('feed');
         Route::get('index', 'ContentController@index')->name('index');
+        Route::put('markAsReviewed/{id}', 'ContentController@markAsReviewed')->name('markAsReviewed');
         Route::get('create', 'ContentController@create')->name('create');
         Route::post('store', 'ContentController@store')->name('store');
         Route::get('edit/{id}', 'ContentController@edit')->name('edit');

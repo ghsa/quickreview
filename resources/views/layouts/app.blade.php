@@ -6,14 +6,9 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
     <title>{{ config('app.name', 'Quick Review') }}</title>
-
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
-
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="https://kit.fontawesome.com/e5763b0d82.js" crossorigin="anonymous"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -84,8 +79,10 @@
         <main class="py-4">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="list-group">
+                            <a class="list-group-item {{Route::currentRouteName() == 'content.feed' ? 'active' : ''}}"
+                               href="{{route('content.feed')}}">Feed </a>
                             <a class="list-group-item {{Route::currentRouteName() == 'content.index' ? 'active' : ''}}"
                                href="{{route('content.index')}}">All Contents </a>
                             <a class="list-group-item {{Route::currentRouteName() == 'content.create' ? 'active' : ''}}"
@@ -119,7 +116,7 @@
                         </div>
                         -->
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-md-9">
                         @yield('content')
                     </div>
                 </div>
@@ -132,7 +129,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 <script>
     $('#editor').summernote({
-        height: 300
+        height: 500
     });
 </script>
 </body>

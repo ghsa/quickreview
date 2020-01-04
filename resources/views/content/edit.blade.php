@@ -12,3 +12,5 @@
         </div>
     </div>
 @endsection
+@section('content-script')
+@endsection
