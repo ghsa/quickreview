@@ -4,11 +4,7 @@
        <span style="float: right"><mark-review-component :content_id="{{$content->id}}" /></span>
     </div>
     <div class="card-body">
-
         {!! $content->content !!}
-
-
-
         <a href="{{route('content.edit', ['id' => $content->id])}}"><i class="fas fa-edit"></i></a>
     </div>
 </div>
