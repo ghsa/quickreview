@@ -9,9 +9,8 @@
 
 <div class="form-group">
     {!! Form::label('content', 'Content') !!}
-    <textarea id="editor" name="content"></textarea>
+    {!! Form::textarea('content', null, ['class' => 'form-control', 'placeholder' => 'Content...', 'id' => 'editor']) !!}
 </div>
-
 
 <div class="form-group">
     <button class="btn btn-primary" type="submit">Save</button>
